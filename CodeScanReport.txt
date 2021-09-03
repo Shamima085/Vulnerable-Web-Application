@@ -1,0 +1,145 @@
+>> Issue: [B303:blacklist] Use of insecure MD2, MD4, MD5, or SHA1 hash function.
+   OWASP: A3 - Sesitive Data Exposure
+   Severity: Medium   Confidence: High
+   Location: create_customer.py:23
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b303-md5
+22	        self.email = email
+23	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+24	        self.banner = safestring.mark_safe(banner)
+Recommendation:https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+
+
+>> Issue: [B703:django_mark_safe] Potential XSS on mark_safe function.
+   OWASP: A7 - Cross Site Scripting (XSS)
+   Severity: Medium   Confidence: High
+   Location: create_customer.py:24
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b703_django_mark_safe.html
+23	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+24	        self.banner = safestring.mark_safe(banner)
+25	
+Recommendation:https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+               
+
+   >> Issue: [B308:blacklist] Use of mark_safe() may expose cross-site scripting       vulnerabilities and should be reviewed.
+      OWASP: A7 - Cross Site Scripting (XSS)
+      Severity: Medium   Confidence: High
+      Location: create_customer.py:24
+      More Info:       https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b308-mark-safe
+      23	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+      24	        self.banner = safestring.mark_safe(banner)
+      25	
+      Recommendation:https://docs.djangoproject.com/en/dev/topics/security/#cross-site-scripting-xss-protection
+                     https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+--------------------------------------------------
+
+
+
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   OWASP: A1 - Injection
+   Severity: Medium   Confidence: Medium
+   Location: init_db.py:48
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b608_hardcoded_sql_expressions.html
+47	        self.createTable('users', 'CREATE TABLE users (id SERIAL PRIMARY KEY, role TEXT NOT NULL, firstname TEXT, lastname TEXT, username TEXT NOT NULL, password TEXT NOT NULL);')
+48	        self.cursor.execute("INSERT INTO users (role, firstname, lastname, username, password) VALUES ('admin','Super','User','admin','" + self.randPassword(16) + "');")
+49	        self.conn.commit()
+Recommendation: https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+
+>> Issue: [B106:hardcoded_password_funcarg] Possible hardcoded password: 'mysecurepassword'
+   OWASP: A6 - Security Misconfiguration
+   Severity: Low   Confidence: Medium
+   Location: init_db.py:14
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b106_hardcoded_password_funcarg.html
+13	    def open(self):
+14	        self.conn = psycopg2.connect(user = "webappuser",
+15	                                    password = "mysecurepassword",
+16	                                    host = "localhost",
+17	                                    port = "5432",
+18	                                    database = "website")
+19	        self.cursor = self.conn.cursor()
+
+Recommendation: https://owasp.org/www-project-application-security-verification-standard/
+    
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   OWASP: NEEDMOREINFO
+   Severity: FALSEPOSITIVE   Confidence: High
+   Location: init_db.py:40
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b311-random
+39	        letters = string.ascii_lowercase
+40	        result_str = ''.join(random.choice(letters) for i in range(length))
+41	        return result_str
+Recommendation : https://owasp.org/www-community/vulnerabilities/Insecure_Randomness
+
+--------------------------------------------------
+>> Issue: [B410:blacklist] Using lxml.etree to parse untrusted XML data is known to be vulnerable to XML attacks. Replace lxml.etree with the equivalent defusedxml package.
+   OWASP: A4 - XML External Entities (XXE)
+   Severity: Low   Confidence: High
+   Location: fix_customer_orders.py:1
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_imports.html#b410-import-lxml
+1	import lxml.etree
+2	import lxml
+3	from lxml import etree
+Recommendation: https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+
+    >> Issue: [B320:blacklist] Using lxml.etree.fromstring to parse untrusted XML data is known to be vulnerable to XML attacks. Replace lxml.etree.fromstring with its      defusedxml equivalent function.
+       OWASP: A4 - XML External Entities (XXE)
+       Severity: Medium   Confidence: High
+       Location: fix_customer_orders.py:11
+       More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b313-b320-xml-bad-etree
+       10	def customerOrdersXML():
+       11	    root = lxml.etree.fromstring(xmlString)
+       12	    root = fromstring(xmlString)
+       Recommendation: https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+
+    >> Issue: [B410:blacklist] Using lxml to parse untrusted XML data is known to be vulnerable to XML attacks. Replace lxml with the equivalent defusedxml package.
+       OWASP: A4 - XML External Entities (XXE)
+       Severity: Low   Confidence: High
+       Location: fix_customer_orders.py:2
+       More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_imports.html#b410-import-lxml
+       1	import lxml.etree
+       2	import lxml
+       3	from lxml import etree
+
+       Recommendation: https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
+                
+
+    >> Issue: [B410:blacklist] Using etree to parse untrusted XML data is known to be vulnerable to XML attacks. Replace etree with the equivalent defusedxml package.
+       OWASP: A4 - XML External Entities (XXE)
+       Severity: Low   Confidence: High
+       Location: fix_customer_orders.py:3
+       More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_imports.html#b410-import-lxml
+       2	import lxml
+       3	from lxml import etree
+       4	from defusedxml.lxml import fromstring
+
+       Recommendation: https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+
+                
+
+--------------------------------------------------
+
+
+
+>> Issue: [B404:blacklist] Consider possible security implications associated with subprocess module.
+   OWASP : A9 - Using Components with Known Vulnerabilities. 
+   Severity: Low   Confidence: High
+   Location: onLogin.py:1
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_imports.html#b404-import-subprocess
+1	import os, sys, subprocess
+2	
+3	class userLogin():
+4	    def __init__(self):
+
+Recommendation : https://owasp.org/www-community/Virtual_Patching_Best_Practices
+
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   OWASP : A1 - Injection
+   Severity: Low   Confidence: High
+   Location: onLogin.py:8
+   More Info:https://bandit.readthedocs.io/en/latest/plugins/b603_subprocess_without_shell_equals_true.html
+7	    def process(self, user, startupcmd):
+8	        p = subprocess.Popen([startupcmd], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+9	        r = p.communicate()[0]
+
+Recommendation : https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html
+
+--------------------------------------------------
