@@ -70,10 +70,11 @@ Key recommendations include:
 
 ---
 
-## Project Files
+## Security Report
 
-- `webappanalysis.pdf` – Detailed security assessment report
-- `CodeScanReport.txt` – Static code analysis results
+For the complete vulnerability analysis, screenshots, exploitation steps, and remediation guidance, see:
+
+[View Security Assessment Report](webappanalysis.pdf)
 
 ---
 
